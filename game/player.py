@@ -43,4 +43,4 @@ class Player:
         self.y = min(game_constants.game_height - self.height, self.y + self.vel)
 
     def draw(self, display_surface):
-        pygame.draw.rect(display_surface, (0, 255, 0), (self.x, self.y, self.width, self.height))
+        pygame.draw.rect(display_surface, (0, 0, 255), (self.x, self.y, self.width, self.height))

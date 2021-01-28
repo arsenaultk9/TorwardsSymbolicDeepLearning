@@ -1,7 +1,9 @@
 import pygame
 from pygame.locals import *
 
-from game.player import Player
+import game.levels.level_mixed as level_mixed
+from game.level import Level
+
 import game.constants as game_constants
 import game.object_pool as object_pool
 
@@ -14,11 +16,12 @@ class Game:
         self.display_surface = None
         self.size = self.weight, self.height = game_constants.game_width, game_constants.game_height
         
-        self.mainPlayer = Player(game_constants.tile_size * 10, game_constants.tile_size * 10)
+        self.level = Level(level_mixed.level)
  
     def on_init(self):
         pygame.init()
         self.display_surface = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
+        self.level.instantiate()
         self.running = True
  
     def on_event(self, event):
