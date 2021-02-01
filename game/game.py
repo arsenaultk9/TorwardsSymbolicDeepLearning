@@ -1,3 +1,4 @@
+from game import player_collision_pool
 import pygame
 from pygame.locals import *
 

@@ -1,11 +1,13 @@
 import pygame
 from pygame.locals import *
 
-import game.constants as game_constants
 from game.player import Player
 from game.good_item import GoodItem
 from game.bad_item import BadItem
 
+from game.score import Score
+
+import game.player_collision_pool as player_collision_pool
 
 class Level:
     def __init__(self, level_content):
@@ -14,23 +16,25 @@ class Level:
         self.main_player = None
 
     def instantiate(self):
-        player_x = 0
-        player_y = 0
+        # Draw player first then other items
+        for row_index, row in enumerate(self.level_content):
+            for column_index, column_item in enumerate(row):
+                if column_item == 'p':
+                    self.main_player = Player(column_index, row_index)
 
-        # Draw map first and player second.
         for row_index, row in enumerate(self.level_content):
             for column_index, column_item in enumerate(row):
                 if column_item == 'b':
-                    bad_item = BadItem(column_index * game_constants.tile_size, row_index * game_constants.tile_size)
+                    bad_item = BadItem(column_index, row_index)
                     self.items.append(bad_item)
+                    player_collision_pool.register(self.main_player, bad_item, Score.decrement_score)
 
                 if column_item == 'g':
-                    good_item = GoodItem(column_index * game_constants.tile_size, row_index * game_constants.tile_size)
+                    good_item = GoodItem(column_index, row_index)
                     self.items.append(good_item)
+                    player_collision_pool.register(self.main_player, good_item, Score.increment_score)
 
-                if column_item == 'p':
-                    player_x = column_index * game_constants.tile_size
-                    player_y = row_index * game_constants.tile_size 
+                
 
 
-        self.main_player = Player(player_x, player_y)
+        
