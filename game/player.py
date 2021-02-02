@@ -1,33 +1,44 @@
 import pygame
-from pygame import constants
 from pygame.locals import *
 
 import game.constants as game_constants
-import game.object_pool as object_pool
-import game.player_collision_pool as player_collision_pool
+from game.object_pool import ObjectPool
+from game.player_collision_pool import PlayerCollisionPool
 
 class Player:
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
-        object_pool.register(self, 1)
+        ObjectPool.register(self, 1)
 
     def __move_left(self):
-        self.x = max(0, self.x - 1)
-        player_collision_pool.update()
+        if self.x - 1 < 0:
+            return
+
+        self.x -= 1
+        PlayerCollisionPool.update()
 
     def __move_up(self):
-        self.y = max(0, self.y - 1)
-        player_collision_pool.update()
+        if self.y -1 < 0:
+            return
+
+        self.y -= 1
+        PlayerCollisionPool.update()
 
     def __move_right(self):
-        self.x = min(game_constants.x_tile_number - 1, self.x + 1)
-        player_collision_pool.update()
+        if self.x + 1 >= game_constants.x_tile_number:
+            return
+
+        self.x += 1
+        PlayerCollisionPool.update()
 
     def __move_down(self):
-        self.y = min(game_constants.y_tile_number - 1, self.y + 1)
-        player_collision_pool.update()
+        if self.y + 1 >= game_constants.y_tile_number:
+            return
+
+        self.y += 1
+        PlayerCollisionPool.update()
 
     def is_colliding_with(self, other):
         if self.x == other.x and self.y == other.y:

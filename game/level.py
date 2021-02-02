@@ -1,4 +1,3 @@
-import pygame
 from pygame.locals import *
 
 from game.player import Player
@@ -7,7 +6,7 @@ from game.bad_item import BadItem
 
 from game.score import Score
 
-import game.player_collision_pool as player_collision_pool
+from game.player_collision_pool import PlayerCollisionPool
 
 class Level:
     def __init__(self, level_content):
@@ -27,12 +26,13 @@ class Level:
                 if column_item == 'b':
                     bad_item = BadItem(column_index, row_index)
                     self.items.append(bad_item)
-                    player_collision_pool.register(self.main_player, bad_item, Score.decrement_score)
+                    PlayerCollisionPool.register(self.main_player, bad_item, Score.decrement_score)
 
                 if column_item == 'g':
                     good_item = GoodItem(column_index, row_index)
                     self.items.append(good_item)
-                    player_collision_pool.register(self.main_player, good_item, Score.increment_score)
+                    PlayerCollisionPool.register(self.main_player, good_item, 
+                        good_item.consume_event(Score.increment_score))
 
                 
 

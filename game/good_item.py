@@ -2,14 +2,23 @@ import pygame
 from pygame.locals import *
 
 import game.constants as game_constants
-import game.object_pool as object_pool
+from game.object_pool import ObjectPool
+from game.player_collision_pool import PlayerCollisionPool
 
 class GoodItem:
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
-        object_pool.register(self, 0)
+        ObjectPool.register(self, 0)
+
+    def consume_event(self, postEvent):
+        def action():
+            PlayerCollisionPool.unregister(self)
+            ObjectPool.unregister(self, 0)
+            postEvent()
+        
+        return action
 
     def update(self):
         pass

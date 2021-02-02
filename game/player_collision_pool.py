@@ -1,13 +1,25 @@
-possible_collision_events = []
+class PlayerCollisionPool:
+    possible_collision_events = dict([])
+    events_to_cancel = []
 
-def register(player, other_object, action):
-    def colision_event():
-        if player.is_colliding_with(other_object):
-            action()
+    @classmethod
+    def register(cls, player, other_object, action):
+        def colision_event():
+            if player.is_colliding_with(other_object):
+                action()
 
-    possible_collision_events.append(colision_event)
+        cls.possible_collision_events[other_object] = colision_event
 
+    @classmethod
+    def unregister(cls, other_object):
+        cls.events_to_cancel.append(other_object)
 
-def update():
-    for possible_event in possible_collision_events:
-        possible_event()
+    @classmethod
+    def update(cls):
+        for possible_event in cls.possible_collision_events.values():
+            possible_event()
+
+        for event_to_cancel in cls.events_to_cancel:
+            del cls.possible_collision_events[event_to_cancel]
+
+        cls.events_to_cancel = []

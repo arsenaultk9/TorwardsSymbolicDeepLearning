@@ -1,22 +1,27 @@
-layer_numbers = []
-instances = dict([])
+class ObjectPool:
+    layer_numbers = []
+    instances = dict([])
 
-def register(instance, layer_number):
-    if instances.get(layer_number) is None:
-        instances[layer_number] = []
-        layer_numbers.append(layer_number)
+    @classmethod
+    def register(cls, instance, layer_number):
+        if cls.instances.get(layer_number) is None:
+            cls.instances[layer_number] = []
+            cls.layer_numbers.append(layer_number)
 
-    instances[layer_number].append(instance)
+        cls.instances[layer_number].append(instance)
 
-def unregister(instance, layer_number):
-    instances[layer_number].remove(instance)
+    @classmethod
+    def unregister(cls, instance, layer_number):
+        cls.instances[layer_number].remove(instance)
 
-def update():
-    for layer_number in sorted(layer_numbers):
-        for instance in instances[layer_number]:
-            instance.update()
+    @classmethod
+    def update(cls):
+        for layer_number in sorted(cls.layer_numbers):
+            for instance in cls.instances[layer_number]:
+                instance.update()
 
-def draw(display_surface):
-    for layer_number in sorted(layer_numbers):
-        for instance in instances[layer_number]:
-            instance.draw(display_surface)
+    @classmethod
+    def draw(cls, display_surface):
+        for layer_number in sorted(cls.layer_numbers):
+            for instance in cls.instances[layer_number]:
+                instance.draw(display_surface)

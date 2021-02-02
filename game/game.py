@@ -6,7 +6,7 @@ import game.levels.level_mixed as level_mixed
 from game.level import Level
 
 import game.constants as game_constants
-import game.object_pool as object_pool
+from game.object_pool import ObjectPool
 
 FPS = 9
 FramePerSec = pygame.time.Clock()
@@ -30,11 +30,11 @@ class Game:
             self.running = False
 
     def on_loop(self):
-        object_pool.update()
+        ObjectPool.update()
 
     def on_render(self):
         self.display_surface.fill((0, 0, 0))
-        object_pool.draw(self.display_surface)
+        ObjectPool.draw(self.display_surface)
 
     def on_cleanup(self):
         pygame.quit()
