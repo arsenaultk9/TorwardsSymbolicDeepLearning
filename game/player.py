@@ -1,3 +1,4 @@
+import os
 import pygame
 from pygame.locals import *
 
@@ -7,6 +8,7 @@ from game.player_collision_pool import PlayerCollisionPool
 
 class Player:
     def __init__(self, x, y):
+        self.image = pygame.image.load(os.path.join('game\\ressources', 'player.png'))
         self.x = x
         self.y = y
 
@@ -62,6 +64,6 @@ class Player:
             self.__move_down()
 
     def draw(self, display_surface):
-        pygame.draw.rect(display_surface, 
-        (0, 0, 255), 
-        (self.x * game_constants.tile_size, self.y * game_constants.tile_size, game_constants.tile_size, game_constants.tile_size))
+        display_surface.blit(
+            self.image, 
+            (self.x * game_constants.tile_size, self.y * game_constants.tile_size, game_constants.tile_size, game_constants.tile_size))

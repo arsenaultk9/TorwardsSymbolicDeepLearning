@@ -1,5 +1,5 @@
 class Score:
-    score = 1
+    score = 0
 
     @classmethod
     def increment_score(cls):

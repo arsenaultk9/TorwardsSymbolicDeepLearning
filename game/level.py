@@ -26,7 +26,8 @@ class Level:
                 if column_item == 'b':
                     bad_item = BadItem(column_index, row_index)
                     self.items.append(bad_item)
-                    PlayerCollisionPool.register(self.main_player, bad_item, Score.decrement_score)
+                    PlayerCollisionPool.register(self.main_player, bad_item, 
+                        bad_item.consume_event(Score.decrement_score))
 
                 if column_item == 'g':
                     good_item = GoodItem(column_index, row_index)

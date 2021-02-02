@@ -33,7 +33,7 @@ class Game:
         ObjectPool.update()
 
     def on_render(self):
-        self.display_surface.fill((0, 0, 0))
+        self.display_surface.fill((255, 255, 255))
         ObjectPool.draw(self.display_surface)
 
     def on_cleanup(self):
