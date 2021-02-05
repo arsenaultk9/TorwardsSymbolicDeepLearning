@@ -3,6 +3,7 @@ import pygame
 from pygame.locals import *
 
 import game.levels.level_mixed as level_mixed
+from game.level_generator import LevelGenerator
 from game.level import Level
 
 import game.constants as game_constants
@@ -17,7 +18,9 @@ class Game:
         self.display_surface = None
         self.size = self.weight, self.height = game_constants.game_width, game_constants.game_height
         
-        self.level = Level(level_mixed.level)
+        level_content = LevelGenerator(True).generate_level()
+        self.level = Level(level_content)
+        # self.level = Level(level_mixed.level)
  
     def on_init(self):
         pygame.init()
