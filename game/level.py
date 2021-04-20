@@ -5,8 +5,11 @@ from game.good_item import GoodItem
 from game.bad_item import BadItem
 
 from game.score import Score
+import game.constants as game_constants
 
 from game.player_collision_pool import PlayerCollisionPool
+from game.player_surroundings import player_surroundings
+
 
 class Level:
     def __init__(self, level_content):
@@ -14,28 +17,39 @@ class Level:
         self.items = []
         self.main_player = None
 
+    def consume_item(self, item, event):
+        def consume():
+            self.items.remove(item)
+            event()
+
+        return consume
+
     def instantiate(self):
         # Draw player first then other items
-        for row_index, row in enumerate(self.level_content):
-            for column_index, column_item in enumerate(row):
+        for y_pos, row in enumerate(self.level_content):
+            for x_pos, column_item in enumerate(row):
                 if column_item == 'p':
-                    self.main_player = Player(column_index, row_index)
+                    self.main_player = Player(x_pos, y_pos)
 
-        for row_index, row in enumerate(self.level_content):
-            for column_index, column_item in enumerate(row):
+        for y_pos, row in enumerate(self.level_content):
+            for x_pos, column_item in enumerate(row):
                 if column_item == 'b':
-                    bad_item = BadItem(column_index, row_index)
+                    bad_item = BadItem(x_pos, y_pos)
                     self.items.append(bad_item)
-                    PlayerCollisionPool.register(self.main_player, bad_item, 
-                        bad_item.consume_event(Score.decrement_score))
+                    remove_bad_event = self.consume_item(bad_item,
+                                                         bad_item.consume_event(Score.decrement_score))
+
+                    PlayerCollisionPool.register(
+                        self.main_player, bad_item, remove_bad_event)
 
                 if column_item == 'g':
-                    good_item = GoodItem(column_index, row_index)
+                    good_item = GoodItem(x_pos, y_pos)
                     self.items.append(good_item)
-                    PlayerCollisionPool.register(self.main_player, good_item, 
-                        good_item.consume_event(Score.increment_score))
+                    remove_good_event = self.consume_item(good_item,
+                                                          good_item.consume_event(Score.increment_score))
 
-                
+                    PlayerCollisionPool.register(
+                        self.main_player, good_item, remove_good_event)
 
-
-        
+    def player_surroundings(self):
+        player_surroundings(self)

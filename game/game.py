@@ -11,23 +11,26 @@ from game.object_pool import ObjectPool
 
 FPS = 9
 FramePerSec = pygame.time.Clock()
- 
+
+
 class Game:
     def __init__(self):
         self.running = True
         self.display_surface = None
         self.size = self.weight, self.height = game_constants.game_width, game_constants.game_height
-        
+
         level_content = LevelGenerator(True).generate_level()
         self.level = Level(level_content)
         # self.level = Level(level_mixed.level)
- 
+
     def on_init(self):
         pygame.init()
-        self.display_surface = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
+        self.display_surface = pygame.display.set_mode(
+            self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
         self.level.instantiate()
+        self.level.player_surroundings()
         self.running = True
- 
+
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self.running = False
@@ -41,12 +44,12 @@ class Game:
 
     def on_cleanup(self):
         pygame.quit()
- 
+
     def on_execute(self):
         if self.on_init() == False:
             self.running = False
- 
-        while( self.running ):
+
+        while(self.running):
             FramePerSec.tick(FPS)
             pygame.display.update()
 

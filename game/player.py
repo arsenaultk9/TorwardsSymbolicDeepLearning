@@ -6,9 +6,11 @@ import game.constants as game_constants
 from game.object_pool import ObjectPool
 from game.player_collision_pool import PlayerCollisionPool
 
+
 class Player:
     def __init__(self, x, y):
-        self.image = pygame.image.load(os.path.join('game\\ressources', 'player.png'))
+        self.image = pygame.image.load(
+            os.path.join('game\\ressources', 'player.png'))
         self.x = x
         self.y = y
 
@@ -22,7 +24,7 @@ class Player:
         PlayerCollisionPool.update()
 
     def __move_up(self):
-        if self.y -1 < 0:
+        if self.y - 1 < 0:
             return
 
         self.y -= 1
@@ -41,6 +43,9 @@ class Player:
 
         self.y += 1
         PlayerCollisionPool.update()
+
+    def coordinates(self):
+        return (self.x, self.y)
 
     def is_colliding_with(self, other):
         if self.x == other.x and self.y == other.y:
@@ -65,5 +70,5 @@ class Player:
 
     def draw(self, display_surface):
         display_surface.blit(
-            self.image, 
+            self.image,
             (self.x * game_constants.tile_size, self.y * game_constants.tile_size, game_constants.tile_size, game_constants.tile_size))
